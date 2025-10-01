@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Callback do WhatsApp Business</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    .container { max-width: 600px; margin: auto; }
+    .status { padding: 1rem; background: #f1f1f1; border-radius: 5px; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Processo de Cadastro Concluído ✅</h1>
+    <p>A Meta redirecionou você de volta após o fluxo de cadastro do WhatsApp Business.</p>
+
+    <div id="result" class="status">Carregando informações...</div>
+  </div>
+
+  <script>
+    function getSignupRequestIdFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('signup_request_id');
+    }
+
+    const signupRequestId = getSignupRequestIdFromURL();
+
+    if (signupRequestId) {
+      document.getElementById('result').innerHTML = `
+        <strong>Signup Request ID recebido:</strong> <br>
+        <code>${signupRequestId}</code> <br><br>
+        Agora envie este ID ao seu backend para validar o processo.
+      `;
+
+      // Exemplo opcional: enviar automaticamente para o backend
+      /*
+      fetch('/api/handle-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signup_request_id: signupRequestId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        // Mostrar dados retornados do backend
+      });
+      */
+    } else {
+      document.getElementById('result').innerHTML = `
+        <span style="color: red;">Erro: Nenhum signup_request_id encontrado na URL.</span>
+      `;
+    }
+  </script>
+</body>
+</html>
