@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Embedded Signup WhatsApp</title>
+  <title>CSC - Whatsapp Onboarding</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      color: #1877f2;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .facebook-button {
+      background-color: #1877f2;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .facebook-button:hover {
+      background-color: #165ecc;
+    }
+
+    #signupContainer {
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
 
-  <button onclick="loginWithFacebook()">Conectar com Facebook</button>
+  <h1>CSC - Whatsapp Onboarding</h1>
+  <h2>Bem-vindo à página de Onboarding para usuários de Whatsapp da CSC</h2>
+  <p>Clique no botão <strong>Entrar com o Facebook</strong> para iniciar sua inscrição.</p>
+
+  <button class="facebook-button" onclick="loginWithFacebook()">Entrar com o Facebook</button>
+
   <div id="signupContainer"></div>
 
   <script>
