@@ -8,7 +8,12 @@
       font-family: Arial, sans-serif;
       background-color: #f0f2f5;
       text-align: center;
-      padding: 50px;
+      padding: 40px 20px;
+    }
+
+    img.logo {
+      width: 150px;
+      margin-bottom: 20px;
     }
 
     h1 {
@@ -51,6 +56,10 @@
 </head>
 <body>
 
+  <!-- Logotipo -->
+  <img src="logo.png" alt="DXC Technology Logo" class="logo">
+
+  <!-- Conteúdo principal -->
   <h1>CSC - Whatsapp Onboarding</h1>
   <h2>Bem-vindo à página de Onboarding para usuários de Whatsapp da CSC</h2>
   <p>Clique no botão <strong>Entrar com o Facebook</strong> para iniciar sua inscrição.</p>
@@ -84,8 +93,7 @@
           // Agora vamos buscar o business_id via Graph API
           FB.api('/me/businesses', function(res) {
             if (res && !res.error && res.data && res.data.length > 0) {
-              const userBusinessId = res.data[0].id; // Pega o primeiro business da lista
-              console.log("Business ID encontrado:", userBusinessId);
+              const userBusinessId = res.data[0].id;
 
               const appId = '1296084651957233';
               const configId = '24901743622770875';
