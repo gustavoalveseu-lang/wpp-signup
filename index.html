@@ -19,6 +19,7 @@
       });
     };
 
+    // Carrega SDK do Facebook
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -30,18 +31,25 @@
     function loginWithFacebook() {
       FB.login(function(response) {
         if (response.authResponse) {
-          // Aqui você poderia pegar o business_id do usuário via FB API
-          // Exemplo: FB.api('/me/businesses')
-          const userBusinessId = 'INSIRA_O_BUSINESS_ID_DO_USUÁRIO'; // Exemplo fictício
+          // Agora vamos buscar o business_id via Graph API
+          FB.api('/me/businesses', function(res) {
+            if (res && !res.error && res.data && res.data.length > 0) {
+              const userBusinessId = res.data[0].id; // Pega o primeiro business da lista
+              console.log("Business ID encontrado:", userBusinessId);
 
-          const appId = '1296084651957233';
-          const configId = '24901743622770875';
-          const callbackUri = encodeURIComponent('https://seusite.com/callback');
-          const signupUrl = `https://www.facebook.com/business/wa/embedded/signup/v2?` +
-            `app_id=${appId}&config_id=${configId}&actor_business_id=${userBusinessId}` +
-            `&features=mdp_embedded_signup&callback_uri=${callbackUri}&version=v19.0`;
+              const appId = '1296084651957233';
+              const configId = '24901743622770875';
+              const callbackUri = encodeURIComponent('https://wpp-signup.vercel.app/callback.html');
+              const signupUrl = `https://www.facebook.com/business/wa/embedded/signup/v2?` +
+                `app_id=${appId}&config_id=${configId}&actor_business_id=${userBusinessId}` +
+                `&features=mdp_embedded_signup&callback_uri=${callbackUri}&version=v19.0`;
 
-          window.open(signupUrl, '_blank');
+              window.open(signupUrl, '_blank');
+            } else {
+              alert('Nenhuma conta de negócios encontrada para este usuário.');
+              console.error(res.error || 'Sem dados');
+            }
+          });
         } else {
           alert("Login cancelado");
         }
