@@ -2,58 +2,49 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Login com Facebook</title>
+  <title>Login com Facebook Personalizado</title>
 </head>
 <body>
 
-  <!-- Botão de login -->
-  <fb:login-button 
-    scope="public_profile,email"
-    onlogin="checkLoginState();">
-  </fb:login-button>
+  <!-- Botão personalizado -->
+  <button onclick="loginWithFacebook()">Entrar com Facebook</button>
 
-  <!-- Exibição de informações -->
+  <!-- Resultado -->
   <div id="status"></div>
 
   <!-- SDK do Facebook -->
+  <div id="fb-root"></div>
   <script>
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '1296084651957233', // Substitua pelo seu App ID
-        cookie     : true,               // Habilita cookies
-        xfbml      : true,               // Renderiza plugins sociais
-        version    : 'v23.0'             // Versão mais recente do SDK
+        appId      : '1296084651957233', // 🔁 Substitua pelo seu App ID
+        cookie     : true,
+        xfbml      : false, // Não precisamos de plugins sociais
+        version    : 'v23.0'
       });
-
-      FB.AppEvents.logPageView();   
     };
 
-    // Carrega SDK assincronamente
     (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/pt_BR/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/pt_BR/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 
-    // Verifica status de login
-    function checkLoginState() {
-      FB.getLoginStatus(function(response) {
-        statusChangeCallback(response);
-      });
-    }
-
-    // Trata a resposta do login
-    function statusChangeCallback(response) {
-      if (response.status === 'connected') {
-        FB.api('/me', {fields: 'name,email'}, function(response) {
-          document.getElementById('status').innerHTML =
-            'Bem-vindo, ' + response.name + ' (' + response.email + ')';
-        });
-      } else {
-        document.getElementById('status').innerHTML = 'Por favor, faça login no Facebook.';
-      }
+    function loginWithFacebook() {
+      FB.login(function(response) {
+        if (response.authResponse) {
+          // Usuário logado com sucesso
+          FB.api('/me', {fields: 'name,email'}, function(userInfo) {
+            document.getElementById('status').innerHTML =
+              'Bem-vindo, ' + userInfo.name + ' (' + userInfo.email + ')';
+          });
+        } else {
+          // Usuário cancelou o login
+          document.getElementById('status').innerHTML = 'Login cancelado.';
+        }
+      }, {scope: 'public_profile,email'});
     }
   </script>
 
