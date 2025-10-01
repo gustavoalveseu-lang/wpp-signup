@@ -2,25 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Login com Facebook Personalizado</title>
+  <title>Embedded Signup WhatsApp</title>
 </head>
 <body>
 
-  <!-- Botão personalizado -->
-  <button onclick="loginWithFacebook()">Entrar com Facebook</button>
+  <button onclick="loginWithFacebook()">Conectar com Facebook</button>
+  <div id="signupContainer"></div>
 
-  <!-- Resultado -->
-  <div id="status"></div>
-
-  <!-- SDK do Facebook -->
-  <div id="fb-root"></div>
   <script>
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '1296084651957233', // 🔁 Substitua pelo seu App ID
+        appId      : '1296084651957233',
         cookie     : true,
-        xfbml      : false, // Não precisamos de plugins sociais
-        version    : 'v23.0'
+        xfbml      : false,
+        version    : 'v19.0'
       });
     };
 
@@ -35,16 +30,24 @@
     function loginWithFacebook() {
       FB.login(function(response) {
         if (response.authResponse) {
-          // Usuário logado com sucesso
-          FB.api('/me', {fields: 'name,email'}, function(userInfo) {
-            document.getElementById('status').innerHTML =
-              'Bem-vindo, ' + userInfo.name + ' (' + userInfo.email + ')';
-          });
+          // Aqui você poderia pegar o business_id do usuário via FB API
+          // Exemplo: FB.api('/me/businesses')
+          const userBusinessId = 'INSIRA_O_BUSINESS_ID_DO_USUÁRIO'; // Exemplo fictício
+
+          const appId = '1296084651957233';
+          const configId = '24901743622770875';
+          const callbackUri = encodeURIComponent('https://seusite.com/callback');
+          const signupUrl = `https://www.facebook.com/business/wa/embedded/signup/v2?` +
+            `app_id=${appId}&config_id=${configId}&actor_business_id=${userBusinessId}` +
+            `&features=mdp_embedded_signup&callback_uri=${callbackUri}&version=v19.0`;
+
+          window.open(signupUrl, '_blank');
         } else {
-          // Usuário cancelou o login
-          document.getElementById('status').innerHTML = 'Login cancelado.';
+          alert("Login cancelado");
         }
-      }, {scope: 'public_profile,email'});
+      }, {
+        scope: 'business_management,whatsapp_business_management,whatsapp_business_messaging'
+      });
     }
   </script>
 
