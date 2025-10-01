@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WhatsApp Embedded Signup</title>
+</head>
+<body>
+  <h3>Iniciando WhatsApp Embedded Signup...</h3>
+
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '1296084651957233', // Seu APP ID
+        autoLogAppEvents: true,
+        xfbml: true,
+        version: 'v21.0'
+      });
+
+      // Inicia o Embedded Signup
+      FB.login(null, {
+        config_id: "24901743622770875",
+        auth_type: "rerequest",
+        response_type: "code",
+        override_default_response_type: true,
+        extras: {
+          sessionInfoVersion: 3,
+          setup: {
+            solutionID: "1720133645349626"
+          }
+        }
+      });
+    };
+
+    // Carregar SDK do Facebook
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      js.async = true;
+      js.defer = true;
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'facebook-jssdk');
+
+    // Escutar evento de finalização do signup e enviar para o pai (Appsmith)
+    window.addEventListener('message', (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'WA_EMBEDDED_SIGNUP' && data.event === 'FINISH') {
+          const response = {
+            waba_id: data.data.waba_id,
+            phone_number_id: data.data.phone_number_id
+          };
+          window.parent.postMessage(response, '*');
+        }
+      } catch(e) {
+        // não é JSON, ignora
+      }
+    });
+  </script>
+
+  <p>Aguardando o usuário finalizar o cadastro...</p>
+</body>
+</html>
